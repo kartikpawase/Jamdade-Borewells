@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Service | Jamdade Borewells</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: { primary: '#0A2540', accent: '#2563EB', surface: '#0f172a' },
+                    fontFamily: { sans: ['Inter', 'sans-serif'], display: ['Outfit', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+</head>
+<body class="bg-gray-50 text-slate-800 dark:bg-slate-900 dark:text-slate-100 transition-colors duration-300 relative min-h-screen flex flex-col">
+
+    <!-- Navbar -->
+    <nav class="fixed w-full z-50 top-0 transition-all duration-300 glass border-b border-gray-200 dark:border-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-20 items-center">
+                <a href="index.html" class="flex-shrink-0 flex items-center gap-2 cursor-pointer">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-cyan-500 flex items-center justify-center text-white shadow-lg">
+                        <i class="ph ph-drop text-2xl"></i>
+                    </div>
+                    <span class="font-display font-bold text-xl tracking-tight text-gray-900 dark:text-white">JAMDADE <span class="text-blue-600 dark:text-blue-400">BOREWELLS</span></span>
+                </a>
+                
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html#about" class="text-sm font-medium hover:text-blue-600 transition-colors">About</a>
+                    <a href="index.html#services" class="text-sm font-medium hover:text-blue-600 transition-colors">Services</a>
+                    <button id="theme-toggle" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-slate-800 transition-colors">
+                        <svg id="theme-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5"></svg>
+                    </button>
+                    <a href="billing.html" class="btn-outline px-6 py-2.5 rounded-full text-sm font-semibold">Billing Portal</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="flex-grow pt-32 pb-24 relative z-10">
+        <!-- Background Blobs -->
+        <div class="blob blob-1 !top-[10%] !left-[-5%] sm:!w-[500px] sm:!h-[500px]"></div>
+        
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12 gsap-fade-up">
+                <h1 class="text-4xl md:text-5xl font-display font-bold mb-4 text-gray-900 dark:text-white">Schedule Your Service</h1>
+                <p class="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">Fill out the form below to book a borewell drill or maintenance service. A representative will contact you shortly to confirm the details.</p>
+            </div>
+
+            <div class="grid lg:grid-cols-3 gap-8 items-start">
+                
+                <!-- Booking Form -->
+                <div class="lg:col-span-2 glass-card rounded-[2rem] p-8 md:p-10 gsap-fade-up">
+                    <form id="booking-form" class="space-y-8">
+                        
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <!-- Name -->
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Full Name *</label>
+                                <div class="relative">
+                                    <i class="ph ph-user absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                                    <input type="text" name="full_name" required class="input-glass w-full rounded-xl pl-12 pr-4 py-3 text-sm" placeholder="John Doe">
+                                </div>
+                            </div>
+                            
+                            <!-- Phone -->
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Phone Number *</label>
+                                <div class="relative">
+                                    <i class="ph ph-phone absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                                    <input type="tel" name="phone" required pattern="[0-9]{10}" class="input-glass w-full rounded-xl pl-12 pr-4 py-3 text-sm" placeholder="9876543210">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Service Details -->
+                        <div class="grid md:grid-cols-2 gap-6 p-6 rounded-2xl bg-white/50 dark:bg-slate-800/50 border border-gray-100 dark:border-slate-700">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Service Type *</label>
+                                <select name="service_type" required class="input-glass w-full rounded-xl px-4 py-3 text-sm appearance-none cursor-pointer">
+                                    <option value="" disabled selected>Select Service...</option>
+                                    <option value="Drilling">Borewell Drilling</option>
+                                    <option value="Flushing">Borewell Flushing / Cleaning</option>
+                                    <option value="Pump">Pump Installation / Repair</option>
+                                    <option value="Camera">Camera Inspection</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Preferred Date *</label>
+                                <div class="relative">
+                                    <i class="ph ph-calendar absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                                    <input type="date" name="preferred_date" required class="input-glass w-full rounded-xl pl-12 pr-4 py-3 text-sm text-gray-600 dark:text-gray-300">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Location GPS UI Placeholder -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Site Location *</label>
+                            <div class="flex gap-4 mb-4">
+                                <button type="button" class="btn-outline flex-1 py-3 rounded-xl flex items-center justify-center gap-2 group text-sm" onclick="this.innerHTML='<i class=\'ph ph-spinner animate-spin\'></i> Fetching...'; setTimeout(() => {this.innerHTML='<i class=\'ph-fill ph-check-circle text-green-500\'></i> Location Captured'; this.classList.remove('btn-outline'); this.classList.add('bg-green-50', 'text-green-700', 'border-green-200', 'dark:bg-green-900/30', 'dark:text-green-400', 'dark:border-green-800');}, 1500)">
+                                    <i class="ph-fill ph-crosshair group-hover:animate-pulse"></i> Auto-detect GPS Location
+                                </button>
+                            </div>
+                            <textarea name="address" rows="3" required class="input-glass w-full rounded-xl px-4 py-3 text-sm" placeholder="Full Postal Address..."></textarea>
+                        </div>
+                        
+                        <!-- Hidden Estimated Cost -->
+                        <input type="hidden" name="estimated_cost" id="hidden-cost" value="21000">
+
+                        <!-- Success Message & Error Message (Hidden by default) -->
+                        <div id="booking-error" class="hidden p-4 rounded-xl bg-red-50 border border-red-200 text-red-800 dark:bg-red-900/30 flex items-center gap-3"><i class="ph-fill ph-warning-circle text-xl"></i> <span id="error-msg"></span></div>
+                        <div id="success-message" class="hidden p-4 rounded-xl bg-green-50 border border-green-200 text-green-800 dark:bg-green-900/30 dark:border-green-800 dark:text-green-300 flex items-center gap-3">
+                            <i class="ph-fill ph-check-circle text-2xl"></i>
+                            <div>
+                                <p class="font-bold">Booking Submitted Successfully!</p>
+                                <p class="text-sm opacity-90">Your Reference ID is <strong id="ref-id-display">#JB-4829</strong>. We will contact you shortly.</p>
+                            </div>
+                        </div>
+
+                        <!-- Submit Buttons -->
+                        <div class="flex items-center justify-end gap-4 pt-4">
+                            <button type="reset" class="px-6 py-3 font-medium text-gray-500 hover:text-gray-900 dark:hover:text-white transition-colors">Cancel</button>
+                            <button type="submit" id="submit-btn" class="btn-primary px-8 py-3 rounded-xl font-bold flex items-center gap-2 shadow-xl shadow-blue-500/20">
+                                Confirm Booking <i class="ph ph-check-circle"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Side Panel (Estimator & Status) -->
+                <div class="lg:col-span-1 space-y-6 gsap-fade-up">
+                    
+                    <!-- Auto Cost Calculator (UI Placeholder) -->
+                    <div class="glass-card rounded-[2rem] p-6 border-t-4 border-blue-500">
+                        <div class="flex items-center gap-3 mb-4 text-blue-600 dark:text-blue-400">
+                            <i class="ph-fill ph-calculator text-2xl"></i>
+                            <h3 class="font-display font-bold text-lg text-gray-900 dark:text-white">Quick Estimator</h3>
+                        </div>
+                        <p class="text-sm text-gray-500 dark:text-gray-400 mb-6">Drag the slider to get an approximate cost for drilling.</p>
+                        
+                        <div class="mb-4">
+                            <div class="flex justify-between text-sm mb-2 font-medium">
+                                <span class="text-gray-700 dark:text-gray-300">Expected Depth</span>
+                                <span class="text-blue-600 dark:text-blue-400 font-bold" id="depth-val">300 ft</span>
+                            </div>
+                            <input type="range" min="100" max="600" value="300" class="w-full accent-blue-600" oninput="
+                                document.getElementById('depth-val').innerText = this.value + ' ft'; 
+                                let cost = this.value * 70;
+                                document.getElementById('est-cost').innerText = '₹' + cost.toLocaleString();
+                                document.getElementById('hidden-cost').value = cost;
+                            ">
+                        </div>
+                        
+                        <div class="mt-6 p-4 rounded-xl bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-800 flex justify-between items-center">
+                            <span class="text-sm font-semibold text-gray-700 dark:text-gray-300">Est. Cost:</span>
+                            <span class="font-display font-bold text-xl text-blue-600 dark:text-blue-400" id="est-cost">₹21,000</span>
+                        </div>
+                        <p class="text-[11px] text-gray-400 dark:text-gray-500 mt-2 text-center">* Casing pipe and pump separate.</p>
+                    </div>
+
+                    <!-- Whatsapp Floating Contact -->
+                    <a href="https://wa.me/917038900900" class="block w-full p-4 rounded-[1.5rem] bg-gradient-to-r from-green-500 to-green-600 text-white shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <i class="ph-fill ph-whatsapp-logo text-3xl"></i>
+                                <div>
+                                    <div class="font-bold">Chat on WhatsApp</div>
+                                    <div class="text-green-100 text-xs text-opacity-90">Instant replies</div>
+                                </div>
+                            </div>
+                            <i class="ph ph-arrow-right"></i>
+                        </div>
+                    </a>
+
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer Script -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="assets/js/main.js"></script>
+    <script>
+        document.getElementById('booking-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('submit-btn');
+            const successDiv = document.getElementById('success-message');
+            const errorDiv = document.getElementById('booking-error');
+            const form = e.target;
+            
+            btn.innerHTML = '<i class="ph ph-spinner animate-spin"></i> Processing...';
+            btn.disabled = true;
+            successDiv.classList.add('hidden');
+            errorDiv.classList.add('hidden');
+            
+            try {
+                const formData = new FormData(form);
+                const req = await fetch('api/book.php', { method: 'POST', body: formData });
+                const res = await req.json();
+                
+                if(res.status === 'success') {
+                    document.getElementById('ref-id-display').innerText = res.reference_id;
+                    successDiv.classList.remove('hidden');
+                    form.reset();
+                    btn.innerHTML = 'Confirm Booking <i class="ph ph-check-circle"></i>';
+                } else {
+                    throw new Error(res.message);
+                }
+            } catch(error) {
+                errorDiv.classList.remove('hidden');
+                document.getElementById('error-msg').innerText = error.message || 'Submission failed. Please try again.';
+                btn.innerHTML = 'Confirm Booking <i class="ph ph-check-circle"></i>';
+            }
+            btn.disabled = false;
+        });
+    </script>
+</body>
+</html>

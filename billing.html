@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice Generatior | Jamdade Borewells</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: { primary: '#0A2540', accent: '#2563EB', surface: '#0f172a' },
+                    fontFamily: { sans: ['Inter', 'sans-serif'], display: ['Outfit', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+</head>
+<body class="bg-gray-100 text-slate-800 dark:bg-slate-900 dark:text-slate-100 transition-colors duration-300 min-h-screen flex flex-col font-sans relative">
+
+    <!-- Navbar (Hidden on Print) -->
+    <nav class="fixed w-full z-50 top-0 transition-all duration-300 glass border-b border-gray-200 dark:border-gray-800 no-print">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-20 items-center">
+                <a href="index.html" class="flex-shrink-0 flex items-center gap-2 cursor-pointer">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-cyan-500 flex items-center justify-center text-white shadow-lg">
+                        <i class="ph ph-drop text-2xl"></i>
+                    </div>
+                    <span class="font-display font-bold text-xl tracking-tight text-gray-900 dark:text-white">JAMDADE <span class="text-blue-600 dark:text-blue-400">BOREWELLS</span></span>
+                </a>
+                
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="text-sm font-medium hover:text-blue-600 transition-colors">Home</a>
+                    <a href="booking.html" class="text-sm font-medium hover:text-blue-600 transition-colors">Bookings</a>
+                    <a href="admin.html" class="text-sm font-medium hover:text-blue-600 transition-colors">Admin</a>
+                    <button id="theme-toggle" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-slate-800 transition-colors">
+                        <svg id="theme-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5"></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="flex-grow pt-28 pb-20 relative z-10 print:pt-0 print:pb-0">
+        
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <!-- Generate UI Controls (Hidden on Print) -->
+            <div class="mb-8 glass p-6 rounded-2xl no-print text-sm flex flex-col md:flex-row gap-6 items-end">
+                <div class="w-full">
+                    <label class="block text-xs font-semibold uppercase text-gray-500 dark:text-gray-400 mb-1">Customer Name</label>
+                    <input type="text" id="input-name" class="input-glass w-full rounded-lg px-3 py-2" value="Rahul Deshmukh" oninput="document.getElementById('out-name').innerText=this.value || 'N/A'">
+                </div>
+                <div class="w-full">
+                    <label class="block text-xs font-semibold uppercase text-gray-500 dark:text-gray-400 mb-1">Mobile No.</label>
+                    <input type="text" id="input-mobile" class="input-glass w-full rounded-lg px-3 py-2" value="+91 98765 43210" oninput="document.getElementById('out-mobile').innerText=this.value || 'N/A'">
+                </div>
+                <div class="w-full">
+                    <label class="block text-xs font-semibold uppercase text-gray-500 dark:text-gray-400 mb-1">Depth (Feet)</label>
+                    <input type="number" id="input-depth" class="input-glass w-full rounded-lg px-3 py-2" value="350" oninput="updateInvoice()">
+                </div>
+                <div class="w-full">
+                    <label class="block text-xs font-semibold uppercase text-gray-500 dark:text-gray-400 mb-1">Cost / Feet (₹)</label>
+                    <input type="number" id="input-rate" class="input-glass w-full rounded-lg px-3 py-2" value="75" oninput="updateInvoice()">
+                </div>
+            </div>
+
+            <!-- Action Bar (Hidden on Print) -->
+            <div class="flex flex-col sm:flex-row justify-end mb-6 no-print gap-4">
+                <button onclick="saveInvoiceToServer()" id="btn-save-invoice" class="btn-outline px-6 py-2 rounded-xl font-bold flex items-center justify-center gap-2 bg-white dark:bg-slate-800 text-green-600 border-green-600 hover:bg-green-600 hover:text-white">
+                    <i class="ph ph-floppy-disk"></i> Save Invoice to DB
+                </button>
+                <button onclick="window.print()" class="btn-primary px-6 py-2 rounded-xl font-bold flex items-center justify-center gap-2 shadow-lg">
+                    <i class="ph ph-printer"></i> Print Invoice
+                </button>
+            </div>
+
+            <!-- Printable Invoice Paper -->
+            <div class="bg-white dark:bg-slate-800 print:bg-white text-gray-900 dark:text-white print:text-black rounded-sm shadow-2xl print:shadow-none mx-auto w-full max-w-[800px] overflow-hidden">
+                <!-- Header -->
+                <div class="p-8 border-b-4 border-blue-600 print:border-black flex justify-between items-start bg-gray-50 dark:bg-slate-900 border-x border-t border-gray-200 dark:border-slate-700 print:bg-transparent print:border-none">
+                    <div class="flex items-center gap-4">
+                        <div class="w-16 h-16 rounded-xl bg-gradient-to-br from-blue-600 to-cyan-500 print:bg-white print:border-2 print:border-black flex items-center justify-center text-white print:text-black">
+                            <i class="ph-fill ph-drop text-4xl"></i>
+                        </div>
+                        <div>
+                            <h1 class="font-display font-black text-3xl tracking-tight text-blue-900 dark:text-blue-400 print:text-black uppercase">Jamdade Borewells</h1>
+                            <p class="text-sm font-medium opacity-80 mt-1">Advanced Drilling Solutions</p>
+                        </div>
+                    </div>
+                    <div class="text-right text-sm">
+                        <h2 class="text-3xl font-display font-bold text-gray-300 dark:text-gray-700 print:text-gray-500 uppercase tracking-widest mb-2">Invoice</h2>
+                        <p><strong>Shop No 38, Road, Bhose Pati,</strong></p>
+                        <p>Pandharpur, Maharashtra 413315</p>
+                        <p>Phone: +91 7038900900</p>
+                        <p class="mt-2 text-xs opacity-70">GSTIN: 27AABCJ1234D1Z5</p>
+                    </div>
+                </div>
+
+                <!-- Invoice Meta & Customer -->
+                <div class="p-8 grid grid-cols-2 gap-8 border-x border-gray-200 dark:border-slate-700 print:border-none">
+                    <div>
+                        <p class="text-xs uppercase font-bold text-gray-400 mb-1">Billed To</p>
+                        <p class="font-bold text-lg" id="out-name">Rahul Deshmukh</p>
+                        <p class="text-sm opacity-80 mt-1" id="out-mobile">+91 98765 43210</p>
+                        <p class="text-sm opacity-80">Pandharpur City</p>
+                    </div>
+                    <div class="text-right">
+                        <table class="w-full text-sm">
+                            <tr><td class="text-gray-500 font-bold pr-4 pb-2">Invoice No:</td><td class="font-mono font-bold pb-2">JB-2026-0492</td></tr>
+                            <tr><td class="text-gray-500 font-bold pr-4 pb-2">Date:</td><td class="pb-2" id="out-date"></td></tr>
+                            <tr><td class="text-gray-500 font-bold pr-4">Due Date:</td><td class="text-red-500 font-bold print:text-black">On Receipt</td></tr>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Particulars Table -->
+                <div class="px-8 pb-8 border-x border-gray-200 dark:border-slate-700 print:border-none print:px-0">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-blue-50 dark:bg-slate-700 print:bg-gray-100 text-sm font-bold border-y-2 border-gray-200 dark:border-slate-600 print:border-black uppercase">
+                                <th class="py-3 px-4">Description</th>
+                                <th class="py-3 px-4 text-center w-32">Depth (Ft)</th>
+                                <th class="py-3 px-4 text-right w-32">Rate/Ft (₹)</th>
+                                <th class="py-3 px-4 text-right w-40">Amount (₹)</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-sm border-b border-gray-200 dark:border-slate-700 print:border-black">
+                            <tr class="border-b border-gray-100 dark:border-slate-800 print:border-gray-300">
+                                <td class="py-4 px-4 font-bold text-gray-900 dark:text-white print:text-black">
+                                    Borewell Drilling Service
+                                    <div class="text-xs font-normal text-gray-500 mt-1">Standard 6-inch borewell drilling in hard rock including casing setup</div>
+                                </td>
+                                <td class="py-4 px-4 text-center font-mono" id="val-depth">350</td>
+                                <td class="py-4 px-4 text-right font-mono" id="val-rate">75.00</td>
+                                <td class="py-4 px-4 text-right font-mono font-bold" id="val-amount">26,250.00</td>
+                            </tr>
+                            <tr class="border-b border-gray-100 dark:border-slate-800 print:border-gray-300">
+                                <td class="py-4 px-4 font-bold text-gray-900 dark:text-white print:text-black">
+                                    Transport & Setup
+                                </td>
+                                <td class="py-4 px-4 text-center font-mono">-</td>
+                                <td class="py-4 px-4 text-right font-mono">-</td>
+                                <td class="py-4 px-4 text-right font-mono font-bold">5,000.00</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <!-- Totals -->
+                    <div class="flex justify-end mt-4">
+                        <div class="w-1/2">
+                            <table class="w-full text-sm text-right">
+                                <tr>
+                                    <td class="py-2 text-gray-500 font-bold">Subtotal:</td>
+                                    <td class="py-2 px-4 font-mono font-bold text-gray-900 dark:text-white print:text-black" id="val-subtotal">31,250.00</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-2 text-gray-500 font-bold">CGST (9%):</td>
+                                    <td class="py-2 px-4 font-mono text-gray-600 print:text-black" id="val-cgst">2,812.50</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-2 text-gray-500 font-bold">SGST (9%):</td>
+                                    <td class="py-2 px-4 font-mono text-gray-600 print:text-black" id="val-sgst">2,812.50</td>
+                                </tr>
+                                <tr class="border-t-2 border-blue-600 print:border-black text-lg">
+                                    <td class="py-4 font-bold text-blue-900 dark:text-blue-400 print:text-black uppercase">Grand Total:</td>
+                                    <td class="py-4 px-4 font-mono font-black text-blue-600 dark:text-blue-400 print:text-black" id="val-total">₹36,875.00</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Footer & Signatures -->
+                <div class="bg-gray-50 dark:bg-slate-900 p-8 border-x border-b border-gray-200 dark:border-slate-700 print:border-none print:bg-transparent">
+                    <div class="flex justify-between items-end">
+                        <div class="text-xs text-gray-500 w-1/2">
+                            <h4 class="font-bold text-gray-700 dark:text-gray-300 mb-2 print:text-black uppercase">Terms & Conditions</h4>
+                            <p>1. Payment is due upon completion of drilling.<br>2. Casing pipe length is approximate and verified on site.<br>3. Water yield is an estimate; natural geology dictates actual flow.<br>4. Subject to Pandharpur jurisdiction.</p>
+                        </div>
+                        <div class="text-center w-1/3">
+                            <div class="border-b-2 border-gray-400 dark:border-slate-500 print:border-black w-full mb-2 h-16 flex items-end justify-center"><i class="text-blue-600/30 font-display font-medium text-2xl skew-x-[-15deg] no-print">Mohan Jamadade</i></div>
+                            <p class="text-sm font-bold uppercase tracking-wider">Authorized Signatory</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- UI Polish: Abstract blur behind paper -->
+            <div class="absolute inset-0 bg-blue-500/5 blur-[100px] -z-10 no-print"></div>
+
+        </div>
+    </main>
+
+    <script>
+        // Set Date
+        const today = new Date();
+        document.getElementById('out-date').innerText = today.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+
+        let currentInvoiceData = {};
+
+        // Update logic
+        function updateInvoice() {
+            const depth = parseFloat(document.getElementById('input-depth').value) || 0;
+            const rate = parseFloat(document.getElementById('input-rate').value) || 0;
+            const customer = document.getElementById('input-name').value;
+            const mobile = document.getElementById('input-mobile').value;
+            
+            const amount = depth * rate;
+            const transport = 5000;
+            const subtotal = amount + transport;
+            
+            const gst = subtotal * 0.09;
+            const total = subtotal + gst + gst;
+
+            currentInvoiceData = {
+                customer_name: customer,
+                mobile: mobile,
+                depth_feet: depth,
+                rate_per_feet: rate,
+                subtotal: subtotal,
+                tax: gst * 2,
+                total_amount: total
+            };
+
+            // Formatters
+            const fmt = new Intl.NumberFormat('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+            document.getElementById('val-depth').innerText = depth;
+            document.getElementById('val-rate').innerText = fmt.format(rate);
+            document.getElementById('val-amount').innerText = fmt.format(amount);
+            
+            document.getElementById('val-subtotal').innerText = fmt.format(subtotal);
+            document.getElementById('val-cgst').innerText = fmt.format(gst);
+            document.getElementById('val-sgst').innerText = fmt.format(gst);
+            document.getElementById('val-total').innerText = '₹' + fmt.format(total);
+        }
+
+        // Add Save to DB function
+        async function saveInvoiceToServer() {
+            const btn = document.getElementById('btn-save-invoice');
+            btn.innerHTML = '<i class="ph ph-spinner animate-spin"></i> Saving...';
+            btn.disabled = true;
+
+            try {
+                // Ensure data is up to date
+                updateInvoice();
+
+                const req = await fetch('api/save_invoice.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(currentInvoiceData)
+                });
+                
+                const res = await req.json();
+
+                if (res.status === 'success') {
+                    btn.innerHTML = '<i class="ph-fill ph-check-circle"></i> Saved: ' + res.invoice_number;
+                    btn.classList.add('bg-green-600', 'text-white');
+                } else if (res.status === 'unauthorized') {
+                    alert('You must be logged in as an Admin to save invoices.');
+                    window.location.href = 'login.html';
+                } else {
+                    alert('Error: ' + res.message);
+                    btn.innerHTML = '<i class="ph ph-warning"></i> Error';
+                }
+            } catch(e) {
+                alert('Connection failed.');
+                btn.innerHTML = '<i class="ph ph-floppy-disk"></i> Save Invoice to DB';
+                btn.disabled = false;
+            }
+        }
+
+        // Initial calc
+        updateInvoice();
+    </script>
+    <script src="assets/js/main.js"></script>
+</body>
+</html>
