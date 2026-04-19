@@ -191,6 +191,77 @@ h1, h2, h3, h4, h5, h6, .display-font {
   box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.2);
 }
 
+/* ── Form Validation Styles ────────────────────────────────── */
+
+/* Error state: red border + subtle red glow */
+.jb-input-error {
+  border-color: #ef4444 !important;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15),
+              0 0 12px rgba(239, 68, 68, 0.08) !important;
+  animation: jb-shake 0.4s ease-in-out;
+}
+
+/* Valid state: green border + subtle green glow */
+.jb-input-valid {
+  border-color: #22c55e !important;
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.15),
+              0 0 12px rgba(34, 197, 94, 0.08) !important;
+}
+
+/* Dark mode adjustments */
+.dark .jb-input-error {
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.25),
+              0 0 16px rgba(239, 68, 68, 0.12) !important;
+}
+.dark .jb-input-valid {
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.25),
+              0 0 16px rgba(34, 197, 94, 0.12) !important;
+}
+
+/* Error message span — hidden by default */
+.jb-error-msg {
+  display: block;
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #ef4444;
+  padding: 0;
+  margin-top: 0;
+  transition: max-height 0.3s ease, opacity 0.3s ease, margin-top 0.3s ease, padding 0.3s ease;
+  line-height: 1.4;
+}
+
+/* Error message visible state */
+.jb-error-msg.jb-error-visible {
+  max-height: 40px;
+  opacity: 1;
+  margin-top: 6px;
+  padding: 2px 0 0 4px;
+}
+
+.dark .jb-error-msg {
+  color: #f87171;
+}
+
+/* Shake animation for error inputs */
+@keyframes jb-shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-5px); }
+  40% { transform: translateX(5px); }
+  60% { transform: translateX(-3px); }
+  80% { transform: translateX(3px); }
+}
+
+/* Override for select elements */
+select.jb-input-error,
+select.jb-input-valid,
+textarea.jb-input-error,
+textarea.jb-input-valid {
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
 /* Print Styles */
 @media print {
   .no-print { display: none !important; }

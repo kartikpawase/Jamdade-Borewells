@@ -68,7 +68,7 @@
                                 <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Full Name *</label>
                                 <div class="relative">
                                     <i class="ph ph-user absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
-                                    <input type="text" name="full_name" required class="input-glass w-full rounded-xl pl-12 pr-4 py-3 text-sm" placeholder="John Doe">
+                                    <input type="text" name="full_name" id="booking-name" required class="input-glass w-full rounded-xl pl-12 pr-4 py-3 text-sm" placeholder="John Doe">
                                 </div>
                             </div>
                             
@@ -77,7 +77,7 @@
                                 <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Phone Number *</label>
                                 <div class="relative">
                                     <i class="ph ph-phone absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
-                                    <input type="tel" name="phone" required pattern="[0-9]{10}" class="input-glass w-full rounded-xl pl-12 pr-4 py-3 text-sm" placeholder="9876543210">
+                                    <input type="tel" name="phone" id="booking-phone" required pattern="[0-9]{10}" class="input-glass w-full rounded-xl pl-12 pr-4 py-3 text-sm" placeholder="9876543210">
                                 </div>
                             </div>
                         </div>
@@ -86,7 +86,7 @@
                         <div class="grid md:grid-cols-2 gap-6 p-6 rounded-2xl bg-white/50 dark:bg-slate-800/50 border border-gray-100 dark:border-slate-700">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Service Type *</label>
-                                <select name="service_type" required class="input-glass w-full rounded-xl px-4 py-3 text-sm appearance-none cursor-pointer">
+                                <select name="service_type" id="booking-service" required class="input-glass w-full rounded-xl px-4 py-3 text-sm appearance-none cursor-pointer">
                                     <option value="" disabled selected>Select Service...</option>
                                     <option value="Drilling">Borewell Drilling</option>
                                     <option value="Flushing">Borewell Flushing / Cleaning</option>
@@ -99,7 +99,7 @@
                                 <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Preferred Date *</label>
                                 <div class="relative">
                                     <i class="ph ph-calendar absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
-                                    <input type="date" name="preferred_date" required class="input-glass w-full rounded-xl pl-12 pr-4 py-3 text-sm text-gray-600 dark:text-gray-300">
+                                    <input type="date" name="preferred_date" id="booking-date" required class="input-glass w-full rounded-xl pl-12 pr-4 py-3 text-sm text-gray-600 dark:text-gray-300">
                                 </div>
                             </div>
                         </div>
@@ -112,7 +112,7 @@
                                     <i class="ph-fill ph-crosshair group-hover:animate-pulse"></i> Auto-detect GPS Location
                                 </button>
                             </div>
-                            <textarea name="address" rows="3" required class="input-glass w-full rounded-xl px-4 py-3 text-sm" placeholder="Full Postal Address..."></textarea>
+                            <textarea name="address" id="booking-address" rows="3" required class="input-glass w-full rounded-xl px-4 py-3 text-sm" placeholder="Full Postal Address..."></textarea>
                         </div>
                         
                         <!-- Hidden Estimated Cost -->
@@ -190,6 +190,7 @@
 
     <!-- Footer Script -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="assets/js/validate.js"></script>
     <script src="assets/js/main.js"></script>
     <script>
         document.getElementById('booking-form').addEventListener('submit', async (e) => {
